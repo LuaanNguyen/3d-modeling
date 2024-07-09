@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import "./style.css";
+import gsap from "gsap";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 //create a new scene
@@ -13,7 +14,10 @@ const sizes = {
 
 //create a sphere
 const geometry = new THREE.SphereGeometry(3, 128, 64);
-const material = new THREE.MeshStandardMaterial({ color: "#ffffff" });
+const material = new THREE.MeshStandardMaterial({
+  color: "#ffffff",
+  roughness: 0.2,
+});
 const mesh = new THREE.Mesh(geometry, material);
 
 //initializing camera
@@ -68,3 +72,31 @@ const loop = () => {
 };
 
 loop();
+
+//timeline
+const tl = gsap.timeline({ default: { duration: 1 } });
+tl.fromTo(mesh.scale, { z: 0, x: 0, y: 0 }, { z: 1, x: 1, y: 1 });
+tl.fromTo("nav", { y: "-100%" }, { y: "0%" });
+tl.fromTo(".title", { opacity: 0 }, { opacity: 1 });
+
+let mouseDown = false;
+let RGB = [];
+window.addEventListener("mousedown", () => (mouseDown = true));
+window.addEventListener("mouseup", () => (mouseDown = false));
+
+window.addEventListener("mousemove", (e) => {
+  if (mouseDown) {
+    RGB = [
+      Math.round((e.pageX / sizes.width) * 255),
+      Math.round((e.pageY / sizes.width) * 255),
+      150,
+    ];
+  }
+  //animate
+  let newColor = new THREE.Color(`rgb(${RGB.join(",")})`);
+  gsap.to(mesh.material.color, {
+    r: newColor.r,
+    g: newColor.g,
+    b: newColor.b,
+  });
+});
