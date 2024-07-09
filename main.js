@@ -5,16 +5,20 @@ const scene = new THREE.Scene();
 
 //create a sphere
 const geometry = new THREE.SphereGeometry(3, 64, 64);
-const material = new THREE.MeshBasicMaterial({ color: "#00ff83" });
+const material = new THREE.MeshStandardMaterial({ color: "0xffff" });
 const mesh = new THREE.Mesh(geometry, material);
 
 //initializing camera
-const camera = new THREE.PerspectiveCamera(35, 800 / 600);
-camera.position.z = 30;
+const camera = new THREE.PerspectiveCamera(35, 800 / 600, 0.1, 100);
+camera.position.z = 100;
 
-//
-const light = new THREE.PointLight(0xffffff, 1, 100);
-light.position.set(0, 10, 10);
+const light = new THREE.PointLight(0xffffff, 150, 100);
+light.position.set(10, 10, 10);
+
+//helper
+// const sphereSize = 1;
+// const pointLightHelper = new THREE.PointLightHelper(light, sphereSize);
+// scene.add(pointLightHelper);
 
 //add to the scene
 scene.add(mesh);
